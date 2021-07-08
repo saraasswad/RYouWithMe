@@ -10,3 +10,4 @@ frames_long <- wide %>%
                values_to ="response",
                large_item1:small_item7,
                names_sep = "_")
+glimpse(frames_long)
