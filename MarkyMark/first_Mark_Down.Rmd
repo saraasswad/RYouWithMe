@@ -1,0 +1,161 @@
+---
+title: "MarkyMark"
+author: "Sarah Alasswad"
+date: "`r Sys.Date()`"
+output:
+  gitbub_document: default
+  html_document:
+    toc: TRUE
+  word_document: default
+  pdf_document:
+    latex_engine: xelatex
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup(this is the name of this chunk), include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+##echo=true will show the code everysingle time, if false, will not show unless explicitly mentioned
+```
+
+\newpage
+
+# Headings
+You can make levels of headings in R markdown documents using hashes.
+
+# One hash for big headings
+## Two hashes for smaller headings
+### Three hashes for evensmaller headings
+#### and so on..
+
+# Bolds and Italics
+You can make things bold or italics using  asterisks on both sides of the text. Use two asterisks for bold and one for italics.
+
+**I want this bold**
+
+*I want this italics*
+ 
+ \* to show an asterisks.
+ 
+# Bullet points
+You can make bullet points with dashes.
+
+- bullet 1
+- bullet 2
+- bullet 3
+
+Do not forget to put a space after the dash to get a bullet point.
+
+# Quotes
+Get quotes using a >
+
+> "Happiness is a decision -  Sarah Alasswad, Biomedical scientist"
+
+# Links
+Put the words that you want to use as the link in square brackets, and the url that you want to link to in round brackets.
+
+You can find all the code to this course on [My github account](https://github.com/saraasswad/RYouWithMe).
+
+# Pictures/tweets/gifs
+It is pretty easy to embed all kinds of media into Rmarkdown documents.
+
+### Picture
+Use `![](nameofimage.png)`
+
+![](drinkingcoffee.JPG)
+
+### Tweets
+Use the embed code from Twitter to insert a tweet.
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">I think I might come back just for your sake Lily 😍<a href="https://twitter.com/hashtag/Duolingo?src=hash&amp;ref_src=twsrc%5Etfw">#Duolingo</a> <a href="https://t.co/k6Yc6zRJLf">pic.twitter.com/k6Yc6zRJLf</a></p>&mdash; Sarah (@saraasswad) <a href="https://twitter.com/saraasswad/status/1413507123695165440?ref_src=twsrc%5Etfw">July 9, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+### Gifs
+Use the link from giphy and write it into `<img src="link from giphy">`.
+
+
+Another way is to insert is as an image but write the link to the gif insted of the name between the parenthesis.
+
+
+
+Also insert HTML symboles like theta: $\Theta$ 
+
+$$
+\beta = 2.5\cdot  \alpha
+$$
+
+# What about Code?
+R markdown is nice because you can incorporate your code and get the output you want in a tidy fashion.
+
+Mac: alt-command-I Windows: alt-control-I
+
+Remember, you can suppress messages and warnings in the header of the chunks.
+
+```{r include=FALSE}
+source(here::here("scripts", "basics.R"))
+```
+
+
+# Load packages
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+# I can set the options globally with the following code
+# This way I don't have to do it with every chunk
+# But I can override it if I want
+knitr::opts_chunk$set(echo = TRUE,
+message = FALSE,
+warning = FALSE)
+
+library(here)
+library(janitor)
+library(tinytex)
+```
+
+# Read data
+```{r}
+cleanbeaches_new <- readr::read_csv(here("data", "cleanbeaches_new.csv"))
+  
+```
+
+# Plot mean buglevels by site
+
+We can create neat data summaries and clean them up using knitr
+```{r}
+cleanbeaches_new %>%
+  group_by(site) %>%
+  summarise(meanbugs = mean(beachbugs,na.rm = TRUE)) %>%
+  knitr::kable()
+```
+# Or we can plot the results
+
+```{r}
+cleanbeaches_new %>%
+  group_by(site)%>%
+  summarise(meanbugs = mean(beachbugs,na.rm = TRUE)) %>%
+  ggplot(aes(x = site, y = meanbugs))+
+  geom_col()+
+  coord_flip()+
+  theme_classic()
+```
+
+# Output
+We can knit to different formats: pdf, html, word...
+If we delete the default from the yaml (or the header) and write under it toc: TRUE we will have a table of content.
+pdf need tinytex package to be installed, next we need to set the pdf_document in the header to latex_engine: xelatex, finally we need to delete the url to any gifs included.(simply follow error message that appear in the console). P.s. proud of myself to having solved that :). 
+
+The header of the document will need to be modified in order to change output styles. Though RStudio will
+allow you to use the knit button to select the output style.
+
+```{r}
+download.file(url = "https://bookdown.org/yihui/rmarkdown/images/format-dropdown.png",
+destfile = "dropdown.png",
+mode = 'wb')
+knitr::include_graphics(path = "dropdown.png")
+##include graphics is to insert image
+```
+
+
+
+
